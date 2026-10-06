@@ -6,13 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgMusic = document.getElementById('bg-music');
     const musicToggle = document.getElementById('music-toggle');
     const wishForm = document.getElementById('wish-form');
-    const wishesList = document.getElementById('wishes-list');
+    const submitBtn = document.getElementById('submit-btn');
+    const successMessage = document.getElementById('success-message');
+
+    // ⚠️ ضع لينك Google Apps Script هنا عندما تجهزه مستقبلاً
+    const SCRIPT_URL = ""; 
 
     let isPlaying = false;
 
     // 1. Enter Button & Audio Play
     enterBtn.addEventListener('click', () => {
-        // Play Audio
         bgMusic.play().then(() => {
             isPlaying = true;
             musicToggle.classList.remove('hidden');
@@ -22,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
             musicToggle.classList.remove('hidden');
         });
 
-        // Hide Splash Screen with animation
         splashScreen.classList.add('fade-out');
         
         setTimeout(() => {
@@ -45,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 3. Countdown Timer Functionality
-    // يمكنك تعديل التاريخ هنا (السنة، الشهر - 1، اليوم، الساعة)
     const weddingDate = new Date(2026, 10, 15, 20, 0, 0).getTime();
 
     function updateCountdown() {
@@ -67,47 +68,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Run Countdown every second
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // 4. Guestbook Form (Wishes)
+    // 4. Send Wishes Form to Google Sheets
     wishForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const nameInput = document.getElementById('guest-name');
-        const messageInput = document.getElementById('guest-message');
+        const name = document.getElementById('guest-name').value.trim();
+        const message = document.getElementById('guest-message').value.trim();
 
-        const name = nameInput.value.trim();
-        const message = messageInput.value.trim();
+        if (!name || !message) return;
 
-        if (name && message) {
-            // Create New Wish Card
-            const newWishCard = document.createElement('div');
-            newWishCard.className = 'wish-card';
-            newWishCard.style.animation = 'fadeIn 0.5s ease';
+        // تغيير حالة الزر أثناء الإرسال
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'جاري الإرسال... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-            newWishCard.innerHTML = `
-                <div class="wish-header">
-                    <span class="author">${escapeHtml(name)}</span>
-                    <span class="heart-icon"><i class="fa-solid fa-heart"></i></span>
-                </div>
-                <p class="wish-text">${escapeHtml(message)}</p>
-            `;
-
-            // Prepend wish to top of list
-            wishesList.insertBefore(newWishCard, wishesList.firstChild);
-
-            // Reset Form Inputs
-            nameInput.value = '';
-            messageInput.value = '';
+        // إذا كان رابط الـ Script متوفر يتم الإرسال، وإلا يظهر نجاح وهمي حتى تقوم بالربط
+        if (SCRIPT_URL) {
+            const formData = new FormData(wishForm);
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+                .then(response => {
+                    handleSuccess();
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    handleSuccess(); // لتجربة واجهة المستخدم حتى عند حدوث خطأ أثناء التطوير
+                });
+        } else {
+            // تجربة العرض بدون كود الـ Backend
+            setTimeout(() => {
+                handleSuccess();
+            }, 800);
         }
     });
 
-    // Helper function to prevent XSS
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.innerText = text;
-        return div.innerHTML;
+    function handleSuccess() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'إرسال التهنئة <i class="fa-solid fa-paper-plane"></i>';
+        successMessage.classList.remove('hidden');
+        wishForm.reset();
+
+        setTimeout(() => {
+            successMessage.classList.add('hidden');
+        }, 5000);
     }
 });
