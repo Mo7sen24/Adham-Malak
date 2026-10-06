@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SCRIPT_URL = ""; 
 
     let isPlaying = false;
-
+    bgMusic.volume = 0.3;
     // 1. Enter Button & Audio Play
     enterBtn.addEventListener('click', () => {
         bgMusic.volume = 0.3;
@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             musicToggle.querySelector('i').className = 'fa-solid fa-compact-disc';
             isPlaying = false;
         } else {
+            bgMusic.volume = 0.3;
             bgMusic.play();
             musicToggle.querySelector('i').className = 'fa-solid fa-compact-disc fa-spin';
             isPlaying = true;
