@@ -32,7 +32,7 @@
 
     <!-- Background Audio -->
     <audio id="bg-music" loop preload="auto">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-marriage-481.mp3" type="audio/mpeg">
+        <source src="wedding-music.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Music Toggle Floating Button -->
@@ -134,33 +134,27 @@
             </div>
         </section>
 
-        <!-- Wishes / Guestbook Section -->
+        <!-- Wishes / Guestbook Section (To Google Sheets) -->
         <section class="section wishes-section">
             <div class="container">
-                <h2 class="section-title">تهانيكم تسعدنا</h2>
-                <p class="section-desc">اتركوا للعروسين كلمة حلوة أو دعوة من القلب لتكتمل سعادتنا</p>
+                <h2 class="section-title">شاركونا تهانيكم</h2>
+                <p class="section-desc">اتركوا للعروسين كلمة حلوة أو دعوة من القلب</p>
 
                 <form id="wish-form" class="wish-form">
                     <div class="input-group">
-                        <input type="text" id="guest-name" placeholder="اسمك الكريم" required>
+                        <input type="text" id="guest-name" name="name" placeholder="اسمك الكريم" required>
                     </div>
                     <div class="input-group">
-                        <textarea id="guest-message" rows="3" placeholder="اكتب تهنئتك هنا..." required></textarea>
+                        <textarea id="guest-message" name="message" rows="3" placeholder="اكتب تهنئتك هنا..." required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" id="submit-btn" class="submit-btn">
                         إرسال التهنئة <i class="fa-solid fa-paper-plane"></i>
                     </button>
-                </form>
-
-                <div class="wishes-list" id="wishes-list">
-                    <div class="wish-card">
-                        <div class="wish-header">
-                            <span class="author">سارة ومحمد</span>
-                            <span class="heart-icon"><i class="fa-solid fa-heart"></i></span>
-                        </div>
-                        <p class="wish-text">ألف مبروك لأجمل عروسين أدهم وملك! ربنا يسعدكم ويجعل حياتكم كلها فرح ونور.</p>
+                    <!-- Success Message Alert -->
+                    <div id="success-message" class="success-message hidden">
+                        <i class="fa-solid fa-circle-check"></i> تم إرسال تهنئتك بنجاح للعروسين، شكراً لك! ❤️
                     </div>
-                </div>
+                </form>
             </div>
         </section>
 
