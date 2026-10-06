@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Enter Button & Audio Play
     enterBtn.addEventListener('click', () => {
+        bgMusic.volume = 0.3;
         bgMusic.play().then(() => {
             isPlaying = true;
             musicToggle.classList.remove('hidden');
