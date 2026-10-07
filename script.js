@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ⚠️ ضع لينك Google Apps Script هنا عندما تجهزه مستقبلاً
 
-    const SCRIPT_URL = ""; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPqMq0SQ9xPrD83ahZb_gR8fzi5zeqfimQx1KaE4UVYJPb2nWGl8BN-OSfjvnKOXGr/exec"; 
 
 
 
@@ -264,67 +264,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // 4. Send Wishes Form to Google Sheets
+// 4. Send Wishes Form to Google Sheets
 
-    wishForm.addEventListener('submit', (e) => {
+wishForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
+    const name = document.getElementById('guest-name').value.trim();
+    const message = document.getElementById('guest-message').value.trim();
 
+    if (!name || !message) {
+        return;
+    }
 
+    // منع الضغط أكثر من مرة أثناء الإرسال
+    submitBtn.disabled = true;
+    submitBtn.innerHTML =
+        'جاري الإرسال... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-        const name = document.getElementById('guest-name').value.trim();
+    try {
+        const formData = new FormData();
 
-        const message = document.getElementById('guest-message').value.trim();
+        formData.append('name', name);
+        formData.append('message', message);
 
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        });
 
+        const result = await response.json();
 
-        if (!name || !message) return;
-
-
-
-        // تغيير حالة الزر أثناء الإرسال
-
-        submitBtn.disabled = true;
-
-        submitBtn.innerHTML = 'جاري الإرسال... <i class="fa-solid fa-spinner fa-spin"></i>';
-
-
-
-        // إذا كان رابط الـ Script متوفر يتم الإرسال، وإلا يظهر نجاح وهمي حتى تقوم بالربط
-
-        if (SCRIPT_URL) {
-
-            const formData = new FormData(wishForm);
-
-            fetch(SCRIPT_URL, { method: 'POST', body: formData })
-
-                .then(response => {
-
-                    handleSuccess();
-
-                })
-
-                .catch(error => {
-
-                    console.error('Error!', error.message);
-
-                    handleSuccess(); // لتجربة واجهة المستخدم حتى عند حدوث خطأ أثناء التطوير
-
-                });
-
+        if (result.success) {
+            handleSuccess();
         } else {
-
-            // تجربة العرض بدون كود الـ Backend
-
-            setTimeout(() => {
-
-                handleSuccess();
-
-            }, 800);
-
+            throw new Error(result.error || 'حدث خطأ أثناء الإرسال');
         }
 
-    });
+    } catch (error) {
 
+        console.error('Error:', error);
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML =
+            'إرسال التهنئة <i class="fa-solid fa-paper-plane"></i>';
+
+        alert('حدث خطأ أثناء إرسال التهنئة. حاول مرة أخرى.');
+    }
+});
+
+function handleSuccess() {
+
+    submitBtn.disabled = false;
+
+    submitBtn.innerHTML =
+        'إرسال التهنئة <i class="fa-solid fa-paper-plane"></i>';
+
+    successMessage.classList.remove('hidden');
+
+    wishForm.reset();
+
+    setTimeout(() => {
+        successMessage.classList.add('hidden');
+    }, 5000);
+}
 
 
     function handleSuccess() {
