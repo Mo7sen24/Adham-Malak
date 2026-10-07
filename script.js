@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ⚠️ ضع لينك Google Apps Script هنا عندما تجهزه مستقبلاً
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPqMq0SQ9xPrD83ahZb_gR8fzi5zeqfimQx1KaE4UVYJPb2nWGl8BN-OSfjvnKOXGr/exec"; 
+    const SCRIPT_URL = ""; 
 
 
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let animationFrameId = null;
 
-    const scrollSpeed = 0.8; // سرعة التمرير (يمكنك تقليلها إلى 0.5 لتكون أبطأ أو زيادتها)
+    const scrollSpeed = 0.5; // سرعة التمرير (يمكنك تقليلها إلى 0.5 لتكون أبطأ أو زيادتها)
 
 
 
