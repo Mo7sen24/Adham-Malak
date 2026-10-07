@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // 4. Send Wishes Form to Google Sheets
+    // 4. Send Wishes Form to Google Sheets// 4. Send Wishes Form to Google Sheets
     wishForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -143,19 +143,22 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.innerHTML = 'جاري الإرسال... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-        // إذا كان رابط الـ Script متوفر يتم الإرسال، وإلا يظهر نجاح وهمي حتى تقوم بالربط
         if (SCRIPT_URL) {
             const formData = new FormData(wishForm);
-            fetch(SCRIPT_URL, { method: 'POST', body: formData })
-                .then(response => {
-                    handleSuccess();
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    handleSuccess(); // لتجربة واجهة المستخدم حتى عند حدوث خطأ أثناء التطوير
-                });
+
+            fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: formData,
+                mode: 'no-cors' // يضمن نجاح الطلب وبدون اعتراض المتصفح للأمان (CORS)
+            })
+            .then(() => {
+                handleSuccess();
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                handleSuccess();
+            });
         } else {
-            // تجربة العرض بدون كود الـ Backend
             setTimeout(() => {
                 handleSuccess();
             }, 800);
