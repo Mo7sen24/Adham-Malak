@@ -350,3 +350,22 @@ function handleSuccess() {
     }
 
 });
+  // Disable right-click
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+  });
+
+  // Block common DevTools shortcuts
+  document.addEventListener("keydown", function (e) {
+    const key = e.key.toLowerCase();
+
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(key)) ||
+      (e.ctrlKey && key === "u") ||
+      (e.ctrlKey && e.shiftKey && key === "k")
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
